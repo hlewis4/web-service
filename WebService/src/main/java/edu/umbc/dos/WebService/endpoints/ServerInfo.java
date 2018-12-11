@@ -1,32 +1,47 @@
 package edu.umbc.dos.WebService.endpoints;
 
+import java.util.Arrays;
+
 public class ServerInfo {
-  public String ip;
-  private int port;
-  private String[] serviceName;
-  
- public String getIp() {
-	return ip;
-}
+	private String ip;
+	private int port;
+	private String[] serviceName;
+	private int count=0; 
 
-public void setIp(String ip) {
-	this.ip = ip;
-}
+	public String getIp() {
+		return ip;
+	}
 
-public int getPort() {
-	return port;
-}
+	public void setIp(String ip) {
+		this.ip = ip;
+	}
 
-public void setPort(int port) {
-	this.port = port;
-}
+	public int getPort() {
+		return port;
+	}
 
-public String[] getServiceName() {
-	return serviceName;
-}
+	public void setPort(int port) {
+		this.port = port;
+	}
 
-public void setServiceName(String[] serviceName) {
-	this.serviceName = serviceName;
-}
-  
+	public String[] getServiceName() {
+		return serviceName;
+	}
+
+	public void setServiceName(String[] serviceName) {
+		this.serviceName = serviceName;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+	public int getCount() {
+		return count;
+	}
+	
+	@Override
+	public String toString() {
+		return ip +"|"+ port + "|"+ Arrays.toString(serviceName);
+	}
+
 }

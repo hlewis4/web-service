@@ -9,14 +9,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.ws.config.annotation.EnableWs;
 
 import edu.umbc.dos.WebService.endpoints.AddService;
 import edu.umbc.dos.WebService.endpoints.divService;
 import edu.umbc.dos.WebService.endpoints.mulService;
 import edu.umbc.dos.WebService.endpoints.subService;
-
-@EnableWs
+import edu.umbc.dos.WebService.lb.Clientcomm;
+import edu.umbc.dos.WebService.lb.ServerComm;
+	
 @Configuration
 @ComponentScan(value="edu.umbc.dos.WebService")
 @Features(features="org.apache.cxf.feature.LoggingFeature")
@@ -54,4 +54,20 @@ public class WebConfig {
 		e.publish("/div");
 		return e;
 	}
+	
+	
+	@Bean	
+	public Endpoint Server() {
+		Endpoint e = new EndpointImpl(bus, new ServerComm());
+		e.publish("/server");
+		return e;
+	}
+	
+	@Bean	
+	public Endpoint Client() {
+		Endpoint e = new EndpointImpl(bus, new Clientcomm());
+		e.publish("/client");
+		return e;
+	}
+	
 }

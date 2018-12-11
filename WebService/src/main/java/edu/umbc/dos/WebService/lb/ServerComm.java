@@ -1,50 +1,46 @@
 package edu.umbc.dos.WebService.lb;
 
-import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import javax.jws.WebMethod;
+import javax.jws.WebParam;
+import javax.jws.WebService;
 
-import edu.umbc.dos.WebService.config.WebConfig;
+import com.google.gson.Gson;
+
 import edu.umbc.dos.WebService.endpoints.ServerInfo;
 
+@WebService
 public class ServerComm {
   
-	private Map<Integer, ServerInfo> operations = new HashMap<Integer, ServerInfo>();
+	public static Map<String, ServerInfo> operations = new ConcurrentHashMap<>();
     
-    public ServerInfo putInfo(String x, int y, String[] z) {
+    private ServerInfo putInfo(String x, int y, String[] z) {
     	ServerInfo e = new ServerInfo();
     	e.setIp(x);
     	e.setPort(y);
         e.setServiceName(z);
-        return e;
-        
+        return e;    
     }
     
-    public void Endpoint() {
-	    String[] service_list1 = new String[2];
-	    service_list1[0]= "AddService";
-	    service_list1[1]= "subService";
-	    service_list1[0]= "divService";
-	    service_list1[0]= "mulService";
-	    operations.put(1, putInfo("localhost:", 8081, service_list1));
-	    
-	   
-    }
-    @Autowired
-	private WebConfig config;
 
-	@RequestMapping("/dynamic-configuration")
-	public Map<Integer, ServerInfo> dynamicConfiguration() {
-		// Not the best practice to use a map to store differnt types!
-		Map<String, Object> map = new HashMap<>();
-		map.put("message", config.findService());
-		map.put("number", config.getNumber());
-		map.put("key", config.isValue());
-		return map;
+	@WebMethod
+	public void Alive(@WebParam(name="ipAddress") String ipAddress, @WebParam(name="port") int port, @WebParam(name="serviceName") String servicenames) {
+		Gson g = new Gson();
+		String[] arr = g.fromJson(servicenames, String[].class);
+		ServerInfo s = putInfo(ipAddress, port, arr);
+		String key = ipAddress+"_"+port;
+		System.out.println("Putting server info with key "+ key +" and services "+ arr[0] );
+		operations.put(key, s);
 	}
-	
+
+	@WebMethod
+	public void Dead(@WebParam(name="ipAddress") String ipAddress, @WebParam(name="port") int port) {
+		String key = ipAddress+"_"+port;
+		operations.remove(key);
+	}
+
 	
 	 
 	

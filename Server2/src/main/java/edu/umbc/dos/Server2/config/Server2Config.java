@@ -9,14 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.ws.config.annotation.EnableWs;
 
 import edu.umbc.dos.Server2.endpoints.AddService;
+import edu.umbc.dos.Server2.endpoints.MulService;
 
-import edu.umbc.dos.Server2.endpoints.mulService;
 
 
-@EnableWs
 @Configuration
 @ComponentScan(value="edu.umbc.dos.Server2")
 @Features(features="org.apache.cxf.feature.LoggingFeature")
@@ -37,7 +35,7 @@ public class Server2Config {
 	
 	@Bean	
 	public Endpoint mulService() {
-		Endpoint e = new EndpointImpl(bus, new mulService());
+		Endpoint e = new EndpointImpl(bus, new MulService());
 		e.publish("/mul");
 		return e;
 	}
